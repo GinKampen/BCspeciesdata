@@ -4,7 +4,7 @@ library(sf)
 library(mapview)
 library(stringr)
 
-species_bc <- readr::read_tsv(file = "~/lectures/Undergrad thesis/R documents/bcspeices-sandbox/bcsee_export.tsv")
+species_bc <- readr::read_tsv(file = "data/bcsee_export.tsv")
 
 names(species_bc) <- gsub(" ", "", names(species_bc))
 ecosections <- dplyr::select(species_bc, ScientificName, Ecosection)
