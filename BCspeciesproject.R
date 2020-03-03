@@ -16,7 +16,8 @@ ecosections <- do.call("rbind", lapply(1:nrow(ecosections), function(x){
                      Ecosection = splits)
 }))
 
-ecosection_map <- sf::st_read("~/Downloads/BCGW_7113060B_1574127741332_17524/ERC_ECOSECTIONS_SP/ERC_ECOSEC_polygon.shp")
+
+ecosection_map <- sf::st_read("data/ERC_ECOSECTIONS_SP/ERC_ECOSEC_polygon.shp")
 
 codes <- as.character(ecosections$Ecosection[as.character(ecosections$ScientificName) == "Abies grandis / Berberis nervosa"])
 ecosection_map <- ecosection_map[as.character(ecosection_map$ECOSEC_CD) %in% codes,]
