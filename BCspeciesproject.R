@@ -49,5 +49,21 @@ print(gp)
 ### make a function where the user can provide a scientific name
 ### and the function returns spatial data ecosections for taht species 
 
+### Dropping columns
+species_bc$ScientificNameSynonyms <- NULL
+species_bc$EnglishNameSynonyms <- NULL
+species_bc$GlobalStatusReviewDate <- NULL
+species_bc$ProvStatusChangeDate <- NULL
+species_bc$ProvStatusReviewDate <- NULL
+species_bc$COSEWICComments <- NULL
+species_bc$ProvincialFRPA <- NULL
+species_bc$GOERT <- NULL
+species_bc$MBCA <- NULL
+species_bc$SARAComments <- NULL
+species_bc$BreedingBird <- NULL
+species_bc$MappingStatus <- NULL
+species_bc$X46 <- NULL
+
+
 
 
