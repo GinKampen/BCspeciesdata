@@ -19,6 +19,7 @@ ecosections <- do.call("rbind", lapply(1:nrow(ecosections), function(x){
                      Ecosection = splits, stringsAsFactors = FALSE)
 }))
 
+### Loading maps used in analysis
 
 ecosection_map <- sf::st_read("data/ERC_ECOSECTIONS_SP/ERC_ECOSEC_polygon.shp")
 ecosection_map2 <- bcmaps::ecosections()
@@ -40,7 +41,9 @@ species_bc$SARAComments <- NULL
 species_bc$BreedingBird <- NULL
 species_bc$MappingStatus <- NULL
 species_bc$X46 <- NULL
+species_bc$CDCMaps <- NULL
 
+### species distribution of ecosections function 
 species_map <- function(species) {
   species_ecosections <- ecosections$Ecosection[ecosections$ScientificName == species]
   species_ecosections_spatial <- ecosection_simple[ecosection_simple$ECOSEC_CD %in% species_ecosections,]
@@ -57,6 +60,7 @@ species_map <- function(species) {
                       return(print(gp))
 }
 
+### conservation status (red/blue list) function
 conservation_status <- function(species1) {
   species_conservation <- species_bc$BCList[species_bc$ScientificName == species1]
   return(print(species_conservation))
