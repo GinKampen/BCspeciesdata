@@ -57,7 +57,12 @@ species_map <- function(species) {
                       return(print(gp))
 }
 
+conservation_status <- function(species1) {
+  species_conservation <- species_bc$BCList[species_bc$ScientificName == species1]
+  return(print(species_conservation))
+}
 
+conservation_status("Anemone occidentalis - Carex nigricans")
 species_map("Anemone occidentalis - Carex nigricans")
 
 
