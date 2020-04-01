@@ -83,7 +83,7 @@ x <- gsub("DD", "Data Deficient", x)
 
 conservation_status <- function(species1) {
   species_conservation <- species_bc[species_bc$ScientificName == species1,]
-  species_conservation_columns <- x[c(species_bc$BCList, species_bc$`COSEWIC Status`, species_bc$`Implemented Date`)]
+  species_conservation_columns <- species1[c("BCList", "COSEWIC Status", "Implemented Date")]
   return(print(species_conservation_columns))
 }
 
