@@ -65,25 +65,48 @@ species_map <- function(species) {
 species_bc <- mutate(species_bc, 
                      COSEWIC = str_replace(COSEWIC, "\\(", ""),
                      COSEWIC = str_replace(COSEWIC, "\\)", ""))
-species_bc <- separate(species_bc, COSEWIC, c("COSEWIC Status", "Implemented Date"),
+species_bc <- separate(species_bc, COSEWIC, c("COSEWIC", "Implemented Date"),
                                               sep =" ", extra = "merge")
 species_bc <- mutate(species_bc, 
                     `Implemented Date` = lubridate::parse_date_time(`Implemented Date`, "m y"))
-                     
-x <- species_bc$`COSEWIC Status`
+
+### solution 1
+# make new COSEWIC Status column from old (now called COSEWIC) so it doesnt get overwritten every time you run
+# then delete the old one
+
+x <- species_bc$`COSEWIC`
 x <- gsub("E", "Endangered", x)
 x <- gsub("XT", "Extirpated", x)
 x <- gsub("T", "Threatened", x)
 x <- gsub("X", "Extinct", x)
 x <- gsub("SC", "Special Concern", x)
 x <- gsub("NAR", "Not at Risk", x)
-x <- gsub("NA", "No Status", x)
 x <- gsub("DD", "Data Deficient", x)
+x[is.na(x)] <- "No Status"
 
 species_bc$`COSEWIC Status` <- x
 
 # check that Cosewic statuses make sense
-unique(species_bc$`COSEWIC Status`)
+table(species_bc$COSEWIC)
+table(species_bc$`COSEWIC Status`)
+
+#### solution 2 - use mutate and case_when
+species_bc <- mutate(species_bc,
+                     `COSEWIC Status` = case_when(COSEWIC == "E" ~ "Endangered",
+                                                  COSEWIC == "XT" ~ "Extirpated",
+                                                  COSEWIC == "T" ~ "Threatened",
+                                                  COSEWIC == "X" ~ "Extinct",
+                                                  COSEWIC == "SC" ~ "Special Concern",
+                                                  COSEWIC == "NAR" ~ "Not At Risk",
+                                                  COSEWIC == "DD" ~ "Data Deficient",
+                                                  COSEWIC == "E/T" ~ "Endangered/Threatened",
+                                                  TRUE ~ "No Status"))
+
+table(species_bc$COSEWIC)
+table(species_bc$`COSEWIC Status`)
+
+### delete old cosewic column
+species_bc$COSEWIC <- NULL
 
 conservation_status <- function(species1) {
   species_conservation <- species_bc[species_bc$ScientificName == species1,]
