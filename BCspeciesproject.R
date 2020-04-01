@@ -68,7 +68,7 @@ species_bc <- mutate(species_bc,
 species_bc <- separate(species_bc, COSEWIC, c("COSEWIC Status", "Implemented Date"),
                                               sep =" ", extra = "merge")
 species_bc <- mutate(species_bc, 
-                    `Implemented Date` = parse_date(`Implemented Date`, "m y"))
+                    `Implemented Date` = lubridate::parse_date_time(`Implemented Date`, "m y"))
                      
 x <- species_bc$`COSEWIC Status`
 x <- gsub("E", "Endangered", x)
@@ -80,10 +80,14 @@ x <- gsub("NAR", "Not at Risk", x)
 x <- gsub("NA", "No Status", x)
 x <- gsub("DD", "Data Deficient", x)
 
+species_bc$`COSEWIC Status` <- x
+
+# check that Cosewic statuses make sense
+unique(species_bc$`COSEWIC Status`)
 
 conservation_status <- function(species1) {
   species_conservation <- species_bc[species_bc$ScientificName == species1,]
-  species_conservation_columns <- species1[c("BCList", "COSEWIC Status", "Implemented Date")]
+  species_conservation_columns <- species_conservation[c("BCList", "COSEWIC Status", "Implemented Date")]
   return(print(species_conservation_columns))
 }
 
