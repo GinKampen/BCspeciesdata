@@ -62,12 +62,15 @@ species_map <- function(species) {
 }
 
 ### conservation status (red/blue list) function
-x <- species_bc$COSEWIC
+species_bc <- mutate(species_bc, 
+                     COSEWIC = str_replace(COSEWIC, "\\(", ""),
+                     COSEWIC = str_replace(COSEWIC, "\\)", ""))
 
+x <- species_bc$COSEWIC
 x <- str_replace_all(x, "E", "Endangered")
 x <- str_replace_all(x, "T", "Threatened")
 x <- str_replace_all(x, "SC", "Special Concern")
-x <- str_replace_all(x, "XT", "Extirpated")
+x <- str_replace(x, "XT", "Extirpated")
 x <- str_replace_all(x, "X", "Extinct")
 x <- str_replace_all(x,"NAR", "Not at Risk")
 x <- str_replace_all(x, "NA", "No Status")
