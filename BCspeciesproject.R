@@ -5,6 +5,7 @@ library(mapview)
 library(stringr)
 library(rmapshaper)
 library(ggplot2)
+library(tidyverse)
 
 species_bc <- readr::read_tsv(file = "data/bcsee_export.tsv")
 
@@ -61,8 +62,24 @@ species_map <- function(species) {
 }
 
 ### conservation status (red/blue list) function
+x <- species_bc$COSEWIC
+
+str_replace(x, "E", "Endangered")
+str_replace(x, "T", "Threatened")
+str_replace(x, "SC", "Special Concern")
+str_replace(x, "XT", "Extirpated")
+str_replace(x, "X", "Extinct")
+str_replace(x,"NAR", "Not at Risk")
+str_replace(x, "NA", "No Status")
+
+species_bc <- gsub("\\()", " ", x)
+fixed_dates <- parse_datetime(COSEWIC, "m y")
+species_bc_2 <- separate(species_bc, COSEWIC, c("COSEWIC Status", "Implemented Date" ))
+
+
 conservation_status <- function(species1) {
-  species_conservation <- species_bc$BCList[species_bc$ScientificName == species1]
+  species_conservation <- species_bc_2[species_bc$ScientificName == species1,]
+  species_conservation_columns <- x[c("BCList", "COSEWIC Status", "Implemented Date")]
   return(print(species_conservation))
 }
 
