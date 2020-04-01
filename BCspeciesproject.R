@@ -64,13 +64,13 @@ species_map <- function(species) {
 ### conservation status (red/blue list) function
 x <- species_bc$COSEWIC
 
-str_replace_all(x, "E", "Endangered")
-str_replace_all(x, "T", "Threatened")
-str_replace_all(x, "SC", "Special Concern")
-str_replace_all(x, "XT", "Extirpated")
-str_replace_all(x, "X", "Extinct")
-str_replace_all(x,"NAR", "Not at Risk")
-str_replace_all(x, "NA", "No Status")
+x <- str_replace_all(x, "E", "Endangered")
+x <- str_replace_all(x, "T", "Threatened")
+x <- str_replace_all(x, "SC", "Special Concern")
+x <- str_replace_all(x, "XT", "Extirpated")
+x <- str_replace_all(x, "X", "Extinct")
+x <- str_replace_all(x,"NAR", "Not at Risk")
+x <- str_replace_all(x, "NA", "No Status")
 
 species_bc <- gsub("\\()", " ", x)
 fixed_dates <- parse_datetime(COSEWIC, "m y")
