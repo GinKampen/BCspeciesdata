@@ -65,25 +65,26 @@ species_map <- function(species) {
 species_bc <- mutate(species_bc, 
                      COSEWIC = str_replace(COSEWIC, "\\(", ""),
                      COSEWIC = str_replace(COSEWIC, "\\)", ""))
-
-x <- species_bc$COSEWIC
-x <- str_replace_all(x, "E", "Endangered")
-x <- str_replace_all(x, "T", "Threatened")
-x <- str_replace_all(x, "SC", "Special Concern")
-x <- str_replace(x, "XT", "Extirpated")
-x <- str_replace_all(x, "X", "Extinct")
-x <- str_replace_all(x,"NAR", "Not at Risk")
-x <- str_replace_all(x, "NA", "No Status")
-
-species_bc <- gsub("\\()", " ", x)
-fixed_dates <- parse_datetime(COSEWIC, "m y")
-species_bc_2 <- separate(species_bc, COSEWIC, c("COSEWIC Status", "Implemented Date" ))
+species_bc <- separate(species_bc, COSEWIC, c("COSEWIC Status", "Implemented Date"),
+                                              sep =" ", extra = "merge")
+species_bc <- mutate(species_bc, 
+                    `Implemented Date` = parse_date(`Implemented Date`, "m y"))
+                     
+x <- species_bc$`COSEWIC Status`
+x <- gsub("E", "Endangered", x)
+x <- gsub("XT", "Extirpated", x)
+x <- gsub("T", "Threatened", x)
+x <- gsub("X", "Extinct", x)
+x <- gsub("SC", "Special Concern", x)
+x <- gsub("NAR", "Not at Risk", x)
+x <- gsub("NA", "No Status", x)
+x <- gsub("DD", "Data Deficient", x)
 
 
 conservation_status <- function(species1) {
-  species_conservation <- species_bc_2[species_bc$ScientificName == species1,]
-  species_conservation_columns <- x[c("BCList", "COSEWIC Status", "Implemented Date")]
-  return(print(species_conservation))
+  species_conservation <- species_bc[species_bc$ScientificName == species1,]
+  species_conservation_columns <- x[c(species_bc$BCList, species_bc$`COSEWIC Status`, species_bc$`Implemented Date`)]
+  return(print(species_conservation_columns))
 }
 
 conservation_status("Anemone occidentalis - Carex nigricans")
